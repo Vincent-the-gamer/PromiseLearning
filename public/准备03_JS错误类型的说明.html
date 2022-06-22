@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>准备02_回调函数的分类</title>
+</head>
+<body>
+   <script>
+       /*
+        JS中的错误(Error)和错误处理
+
+        1. 错误的类型
+               Error: 所有错误的父类型  类比Java的Exception
+               ReferenceError: 引用的变量不存在
+               TypeError: 数据类型不正确
+               RangeError: 数据值不在其所允许的范围内：超出最大回调栈 ---- 死循环，无限递归等
+               SyntaxError: 语法错误
+        2. 错误处理
+               捕获错误： try{} catch(){}
+               抛出错误： throw error
+        3. 错误对象
+               message属性： 错误相关信息
+               stack属性： 记录信息
+       */
+
+       //演示：ReferenceError: 引用的变量不存在
+       /* console.log(a) */
+
+       //演示： TypeError: 数据类型不正确
+       /* const demo = () => {}
+       demo()()  */
+
+       //演示: RangeError: 数据值不在其所允许的范围内
+       /* const demo = () => (demo())
+       demo()  */
+
+       //演示： SyntaxError: 语法错误 这玩意还用演示？2333
+       // console.log(1
+
+
+
+
+   </script>
+</body>
+</html>

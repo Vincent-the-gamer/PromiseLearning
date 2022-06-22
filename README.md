@@ -1,17 +1,52 @@
 # Web前端 - Promise学习笔记
 
-## 作者：诡锋     B站： -诡锋丿Lavafall-
+## 作者：诡锋  B站： -诡锋丿Lavafall-
 
-笔记对应的视频教程： https://www.bilibili.com/video/BV1GA411x7z1
-如果想看手撸Promise的相关笔记，请看最后。
+笔记对应的视频教程：(推荐第二个, 虽然我看完了第一个才发现第二个...) \
+https://www.bilibili.com/video/BV1GA411x7z1  \
+https://www.bilibili.com/video/BV1sU4y117YD   
+ 
+如果想看我自己封装Promise的相关笔记，请看最后。
 
-### Promise基本使用
+## 准备工作：前置知识点（有JS基础的就别看了）
+### 函数对象和实例对象
+1. 函数对象：将函数作为对象使用时，简称为函数对象
+2. 实例对象： new 构造函数或类产生的对象, 我们称之为实例对象
 
-Promise一般用于封装异步操作，解决多异步操作嵌套导致的回调地狱问题。
+### 回调函数的分类
+回调：我们定义的函数，我们没有调用，最终执行了。
 
-注意：Promise的参数是个函数，通常叫做Executor（执行器）函数，它会立即同步调用(启动里面代码块的操作，大多数都会放异步操作)，然后then方法就等Promise的状态改变后才被调用，所以then是异步的。
+1. 同步的回调函数：
+ 理解：立即在主线程上执行，不会放入回调队列中
+ 例子：数组遍历相关的回调函数 / Promise的executor函数
+2. 异步的回调函数：
+ 理解：不会立即执行，会放入回调队列中以后执行
+ 例子：定时器回调 / ajax回调 / Promise的成功，失败的回调
 
-从用途来说，将Promise实例包裹异步操作以后，再封装成一个函数（函数返回该Promise实例)，可以使得该异步操作更容易复用，不用写出大量重复的代码，同时也可以直接对函数调用then方法，或者链式调用then解决多个异步操作嵌套的回调地狱。
+
+### JS中的错误(Error)和错误处理
+1. 错误的类型
+ * Error: 所有错误的父类型  类比Java的Exception
+ * ReferenceError: 引用的变量不存在
+ * TypeError: 数据类型不正确
+ * RangeError: 数据值不在其所允许的范围内：超出最大回调栈 ---- 死循环，无限递归等
+ * SyntaxError: 语法错误
+2. 错误处理
+ * 捕获错误： try{} catch(){}
+ * 抛出错误： throw 'error' / throw new Error('error');
+3. 错误对象
+ * message属性： 错误相关信息
+ * stack属性： 记录信息
+
+## 正式学习Promise
+### Promise是个啥？
+抽象表达：
+1. Promise是一门新的技术（ES6提出的特性)
+2. Promise是JS中进行异步编程的新方案（旧方案是纯回调)
+
+具体表达:
+1. 从语法上来说： Promise是一个内置构造函数
+2. 从功能上来说： Promise的实例对象可以用来封装一个异步操作，并可以获取其成功/失败的值
 
 ### Promise的状态
 状态：Promise实例对象中的一个属性  「PromiseState」
@@ -42,24 +77,55 @@ Promise的状态改变
 
 
 ### Promise的API
-1. Promise 构造函数: Promise ( executor(){} ) 
+#### Promise 构造函数: Promise ( executor(){} ) 
 
 (1) executor 函数: 执行器 (resolve, reject) => {} \
 (2) resolve 函数: 内部定义成功时我们调用的函数 value => {} \
 (3) reject 函数: 内部定义失败时我们调用的函数 reason => {}
 
 说明: executor 会在 Promise 内部立即同步调用,异步操作在执行器中执行
-2. Promise.prototype.then 方法: (onResolved, onRejected) => {}
+
+#### Promise.prototype.then 方法: (onResolved, onRejected) => {}
 
    (1) onResolved 函数: 成功的回调函数 (value) => {} \
    (2) onRejected 函数: 失败的回调函数 (reason) => {}
 
-   说明: 指定用于得到成功 value 的成功回调和用于得到失败 reason 的失败回调
-   返回一个新的 promise 对象
-3. Promise.prototype.catch 方法: (onRejected) => {} \
+Promise实例.then()返回的是一个【新的Promise实例】，它的值和状态由什么决定？
+
+* 如果then所指定的回调返回的是非Promise值: a
+  那么【新Promise实例】状态为： 成功(fulfilled), 成功的值是a
+* 如果then所指定的回调返回的是一个Promise实例：p
+  那么【新Promise实例】状态，值 都与p一致
+* 如果then所指定的回调抛出异常：
+  那么【新Promise实例】状态为：失败（rejected), reason为抛出的那个异常。
+
+.then的链式调用：解决回调地狱问题
+
+#### Promise.prototype.catch 方法: (onRejected) => {}
    (1) onRejected 函数: 失败的回调函数 (reason) => {} \
    说明: catch()是then()的语法糖, 相当于: then(undefined, onRejected)
 
+### 中断Promise链
+1. 当使用Promise的then链式调用是，在中间中断，不再调用后面的回调函数
+2. 方法：在失败的回调函数中返回一个pending状态的Promise实例
+
+典中典用法：
+~~~js
+  return new Promise(() => {})
+~~~
+
+### Promise错误穿透(catch兜底)
+1. 当使用Promise的then链式调用时，可以在最后用catch指定一个失败的回调
+2. 前面任何操作出了错误，都会传到最后失败的回调中处理
+备注： 如果不存在then的链式调用，就不需要考虑then的错误穿透
+
+原理：链式调用时不指定失败回调，但是Promise会悄悄的加一个
+~~~js
+ reason => {throw '失败的那个Promise的失败值'}
+~~~
+抛出错误会导致当前这个then返回是一个全新的失败的Promise,值为抛出的错误值
+然后一直触发下一个then的错误的回调，一个一个把错误抛下去，直到catch兜底来
+统一处理错误。
 
 ### async/await
 #### async
@@ -80,7 +146,7 @@ await一般用于拿到then的成功返回值。
 * 如果 await 的Promise失败了，就会抛出异常，需要通过try...catch捕获处理
 
 
-### 手撸Promise
+### 手撸Promise -- 自己封装
 内容在public文件夹的promise.js里面
 
 具体过程有空再更...
