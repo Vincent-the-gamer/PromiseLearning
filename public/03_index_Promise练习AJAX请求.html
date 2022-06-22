@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>Promise练习AJAX</title>
+    <style>
+        .container{
+            height: auto;
+            width: 80%;
+            box-shadow: 5px 5px 5px black;
+            background-color: lightcyan;
+        }
+        .h2-text{
+            margin-left: 10px;
+            font-family: "LXGW WenKai",serif;
+        }
+        .button-primary{
+            width: 100px;
+            height: 40px;
+            margin-left: 10px;
+            margin-bottom: 10px;
+            background-color: deepskyblue;
+            color: white;
+            box-shadow: 2px 2px 2px black;
+        }
+    </style>
+</head>
+<body>
+  <div class="container">
+      <h2 class="h2-text">Promise 练习 AJAX 操作</h2>
+      <hr/>
+      <button class="button-primary" id="btn">点击发送ajax</button>
+  </div>
+
+<script type="text/javascript">
+    //接口地址：https://apihut.net/greet
+    //获取元素对象
+    const btn = document.getElementById("btn")
+
+    btn.addEventListener('click',function () {
+        //创建 Promise 实例
+        const p = new Promise((resolve, reject) => {
+            //原生AJAX
+            //1. 创建对象
+            const xhr = new XMLHttpRequest()
+            //2. 初始化
+            xhr.open('GET', 'https://apihut.net/greet')
+            xhr.responseType = 'json'
+            //3. 发送
+            xhr.send();
+            //4. 处理响应结果
+            xhr.onreadystatechange = function (){
+                if(xhr.readyState === 4){
+                    //判断响应状态码 2xx 代表成功
+                    if(xhr.status >= 200 && xhr.status < 300){
+                        //成功
+                        resolve(xhr.response)
+                    }
+                    else{
+                        //失败
+                        reject(xhr.status)
+                    }
+                }
+            }
+        })
+
+        p.then(
+            value => {
+                console.log(value)
+            },
+            reason => {
+                console.warn(reason)
+            }
+        )
+    })
+</script>
+</body>
+</html>

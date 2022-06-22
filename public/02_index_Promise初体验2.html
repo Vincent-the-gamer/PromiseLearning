@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>Promise初体验</title>
+    <style>
+        .container{
+            height: auto;
+            width: 80%;
+            box-shadow: 5px 5px 5px black;
+            background-color: lightcyan;
+        }
+        .h2-text{
+            margin-left: 10px;
+            font-family: "LXGW WenKai",serif;
+        }
+        .button-primary{
+            width: 100px;
+            height: 40px;
+            margin-left: 10px;
+            margin-bottom: 10px;
+            background-color: deepskyblue;
+            color: white;
+            box-shadow: 2px 2px 2px black;
+        }
+    </style>
+</head>
+<body>
+  <div class="container">
+      <h2 class="h2-text">Promise 初体验</h2>
+      <hr/>
+      <button class="button-primary" id="btn">点击抽奖</button>
+  </div>
+
+<script type="text/javascript">
+    //生成随机数
+    function rand(m,n){
+        return Math.ceil(Math.random() * (n-m+1)) + m-1;
+    }
+    /*
+      需求：点击按钮, 2s后显示是否中奖(30%概率中奖)
+         若中奖输出 恭喜，您获得了一台PS5
+         若未中奖输出  再来一次
+    */
+
+    //获取元素对象
+    const btn = document.getElementById("btn");
+    //绑定单击事件
+    btn.addEventListener('click',function (){
+        //不用Promise
+        // setTimeout(() => {
+        //     // 概率设置为30% (假设Math.random概率分布平均,其实它好像不平均)
+        //     //获取从1 - 100的一个随机数
+        //     let n = rand(1,100);
+        //     //判断
+        //     if(n <= 30){
+        //         alert("恭喜，您获得了一台PS5");
+        //     }
+        //     else{
+        //         alert("很遗憾未中奖，再来一次！")
+        //     }
+        // })
+
+        //使用Promise实现
+        //Promise构造函数实例化时，要接收两个参数，它们都是函数
+        //resolve 解决 函数类型的数据
+        //reject 拒绝 函数类型的数据
+        const p = new Promise((resolve,reject) => {
+            //包裹一个异步操作
+            setTimeout(() => {
+                // 概率设置为30% (假设Math.random概率分布平均,其实它好像不平均)
+                //获取从1 - 100的一个随机数
+                let n = rand(1,100);
+                //判断
+                if(n <= 30){
+                    resolve(n); //将Promise的状态设置为成功, 将n作为成功的参数传递给then的第一个函数的参数
+                }
+                else{
+                    reject(n); //将Promise的状态设置为失败， 将n作为失败的参数传递给then的第二个函数的参数
+                }
+            })
+        })
+        p.then(
+            value => {
+                alert("恭喜，您获得了一台PS5，您的中奖数字为: "+value);
+            },
+            reason => {
+                alert("很遗憾未中奖，再来一次！您的号码为: "+reason);
+            }
+        )
+
+    })
+
+</script>
+</body>
+</html>

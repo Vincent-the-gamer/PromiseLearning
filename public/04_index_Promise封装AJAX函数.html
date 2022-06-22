@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>Promise封装AJAX操作</title>
+    <style>
+        .container{
+            height: auto;
+            width: 80%;
+            box-shadow: 5px 5px 5px black;
+            background-color: lightcyan;
+        }
+        .h2-text{
+            margin-left: 10px;
+            font-family: "LXGW WenKai",serif;
+        }
+        .button-primary{
+            width: 100px;
+            height: 40px;
+            margin-left: 10px;
+            margin-bottom: 10px;
+            background-color: deepskyblue;
+            color: white;
+            box-shadow: 2px 2px 2px black;
+        }
+    </style>
+</head>
+<body>
+  <div class="container">
+      <h2 class="h2-text">Promise封装AJAX操作</h2>
+      <hr/>
+      <button onclick="sendAjax()" class="button-primary" id="btn">点击发送ajax</button>
+  </div>
+
+<script type="text/javascript">
+    //接口地址：https://apihut.net/greet
+
+    /*
+      封装一个函数 sendAJAX 发送 GET 请求
+      参数： URL
+      返回结果： Promise对象
+    */
+
+    function sendAJAX(url){
+        return new Promise((resolve, reject) => {
+            const xhr = new XMLHttpRequest();
+            xhr.responseType = 'json';
+            xhr.open('GET',url);
+            xhr.send();
+            //处理结果
+            xhr.onreadystatechange = function(){
+                if(xhr.readyState === 4){
+                    //成功
+                    if(xhr.status >= 200 && xhr.status < 300){
+                        resolve(xhr.response)
+                    }
+                    //失败
+                    else{
+                        reject(xhr.status)
+                    }
+                }
+            }
+        })
+    }
+    //按钮点击回调
+    function sendAjax(){
+        sendAJAX('https://apihut.net/greet').then(
+            value => {
+                console.log('成功\n'+JSON.stringify(value))
+            },
+            reason => {
+                console.log('失败\n',reason)
+            }
+        )
+    }
+</script>
+</body>
+</html>

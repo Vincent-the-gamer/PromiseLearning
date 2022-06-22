@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>await表达式</title>
+</head>
+<body>
+<script type="text/javascript">
+    async function main(){
+        let p = new Promise((resolve, reject) => {
+            // resolve('OK')
+            reject('Error')
+        })
+
+        //1. await右侧为Promise的情况, 则await返回这个Promise 成功 的值
+        // let res = await p;
+        //2. 右侧为其他的数据, 是啥返回啥
+        // let res2 = await 233;
+        // 如果Promise失败，则抛出异常，使用try...catch处理异常
+        try{
+            let res3 = await p;
+        }catch(e){
+            console.log(e);
+        }
+
+    }
+    main();
+</script>
+</body>
+</html>

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>Promise关键问题 - 改变状态和指定回调的顺序问题</title>
+</head>
+<body>
+<script type="text/javascript">
+    // 注意：这里说的是指定回调的时候，而不是回调被调用的时候
+    // 当执行器函数是同步时，则先改变状态，后指定回调，先改变了状态，再指定then方法的回调，然后被调用
+    // 当执行器函数是异步任务时，则先指定回调，后改变状态，也就是说then先挂上去，但是并没有执行，等待状态改变了再调用
+    let p = new Promise((resolve, reject) => {
+        setTimeout(() => {
+            resolve('OK');
+        }, 1000)
+    });
+
+    //多个回调在状态改变时都会调用
+    p.then(
+        value => {
+            console.log(value)
+        },
+        reason => {
+            console.log(reason)
+        }
+    )
+
+</script>
+</body>
+</html>

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>Promise API - all</title>
+</head>
+<body>
+<script type="text/javascript">
+    let p1 = new Promise((resolve, reject) => {
+        resolve('我是P1的成功')
+    })
+    let p2 = new Promise((resolve, reject) => {
+        resolve('我是P2的成功')
+        // reject("err")
+    })
+    let p3 = new Promise((resolve, reject) => {
+        resolve('我是P3的成功')
+    })
+     //Promise.all参数要传入一个数组，数组里每一个值都是一个Promise对象
+     //result的结果为：如果数组里所有Promise均成功，则result成功，值为它们成功的值的数组
+    //只要有一个失败，那么result就失败，值为失败的Promise的值
+    //如果有多个失败，result的失败值为第一个失败Promise的值
+    const result = Promise.all([p1,p2,p3])
+    console.log(result)
+
+</script>
+</body>
+</html>

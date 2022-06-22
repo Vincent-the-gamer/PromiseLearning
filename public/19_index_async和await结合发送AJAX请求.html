@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>async与await结合发送AJAX请求</title>
+    <style>
+        .container{
+            height: auto;
+            width: 80%;
+            box-shadow: 5px 5px 5px black;
+            background-color: lightcyan;
+        }
+        .h2-text{
+            margin-left: 10px;
+            font-family: "LXGW WenKai",serif;
+        }
+        .button-primary{
+            width: 100px;
+            height: 40px;
+            margin-left: 10px;
+            margin-bottom: 10px;
+            background-color: deepskyblue;
+            color: white;
+            box-shadow: 2px 2px 2px black;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2 class="h2-text">async与await结合发送AJAX请求</h2>
+    <hr/>
+    <button class="button-primary" id="btn">点击发送ajax</button>
+</div>
+<script type="text/javascript">
+    //接口地址：https://apihut.net/greet
+    function sendAJAX(url){
+        return new Promise((resolve, reject) => {
+            const xhr = new XMLHttpRequest();
+            xhr.responseType = 'json';
+            xhr.open('GET',url);
+            xhr.send();
+            //处理结果
+            xhr.onreadystatechange = function(){
+                if(xhr.readyState === 4){
+                    //成功
+                    if(xhr.status >= 200 && xhr.status < 300){
+                        resolve(xhr.response)
+                    }
+                    //失败
+                    else{
+                        reject(xhr.status)
+                    }
+                }
+            }
+        })
+    }
+    let btn = document.getElementById("btn");
+
+    btn.addEventListener('click',async function(){
+        //获取信息
+        let msg = await sendAJAX('https://apihut.net/greet');
+        console.log(msg);
+    })
+</script>
+</body>
+</html>

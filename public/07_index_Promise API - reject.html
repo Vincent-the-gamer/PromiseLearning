@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>Promise API - reject</title>
+</head>
+<body>
+<script type="text/javascript">
+    //无论传入什么值，永远返回一个失败状态的Promise对象
+    //失败的结果是Promise.reject传入的值，比如p2，失败的结果是传入的整个Promise对象
+    let p = Promise.reject(521);
+    console.log(p);
+    let p2 = Promise.reject(new Promise((resolve, reject) => {
+        resolve("OK")
+    }))
+    console.log(p2)
+
+
+</script>
+</body>
+</html>

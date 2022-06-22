@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>Promise API - race</title>
+</head>
+<body>
+<script type="text/javascript">
+    //可以理解成赛跑，毕竟race嘛
+    //Promise.race返回的值为第一个改变状态的Promise对象的值，无论成功与失败
+    let p1 = new Promise((resolve, reject) => {
+        setTimeout(() => {
+            resolve('我是P1的成功');
+        },1000)
+    })
+    let p2 = new Promise((resolve, reject) => {
+        resolve('我是P2的成功')
+    })
+    let p3 = new Promise((resolve, reject) => {
+        resolve('我是P3的成功')
+    })
+
+    const result = Promise.race([p1,p2,p3])
+    console.log(result)
+</script>
+</body>
+</html>

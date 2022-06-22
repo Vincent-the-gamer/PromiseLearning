@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>Promise关键问题 - 异常穿透</title>
+</head>
+<body>
+<script type="text/javascript">
+    //异常穿透：then链式调用时，不用每一个都指定失败的回调，而是直接在最后"兜底", 调用catch拿到过程中任意一个失败的值
+    let p = new Promise((resolve, reject) => {
+        setTimeout(() => {
+            reject("error")
+        },1000)
+    });
+
+    p.then(value => {
+        console.log(111)
+    }).then(value => {
+        console.log(222)
+    }).then(value => {
+        console.log(333)
+    }).catch(reason => {
+        console.warn(reason)
+    })
+</script>
+</body>
+</html>

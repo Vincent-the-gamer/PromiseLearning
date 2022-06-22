@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>Promise API</title>
+</head>
+<body>
+<script type="text/javascript">
+   let p = new Promise((resolve, reject) => {
+       //executor函数会立即同步调用
+       console.log(111)
+       //修改 Promise 对象的状态
+       reject('error');
+   });
+  console.log(222)
+   //输出顺序：111   222
+
+   //执行 then 方法 异步操作
+   p.then(
+       value => {
+           console.log(value)
+       }
+   )
+   //执行 catch 方法  这和.then一样是异步的
+   //最终可以观察到输出顺序是111 222 reason的值，因为reason的输出是在失败后处理错误时才调用
+   p.catch(
+       reason => {
+           console.log(reason)
+       }
+   )
+</script>
+</body>
+</html>

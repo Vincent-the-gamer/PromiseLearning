@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>async函数</title>
+</head>
+<body>
+<script type="text/javascript">
+    //async: 异步关键字 async修饰的函数返回一个Promise对象
+  async function main(){
+    //1. 如果返回值是一个非Promise的数据,结果就是成功的Promise对象,结果值就是这个数据
+    //   return 233; //返回 Promise 对象 成功 值为233
+
+    //2. 如果返回的是一个Promise对象, return的结果决定函数的状态
+      return new Promise((resolve, reject) => {
+          resolve('OK'); //这里是成功的，函数也是成功的
+          // reject('Error'); //这里是失败的，函数也是失败的
+      })
+     //3. 抛出异常 返回失败的Promise, 失败值为抛出的内容
+      throw "卧槽！";
+  }
+
+  let result = main();
+
+  console.log(result);
+</script>
+</body>
+</html>

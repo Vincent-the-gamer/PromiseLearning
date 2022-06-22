@@ -1,0 +1,6 @@
+# igt要忽略的文件
+.idea
+.DS_Store
+*/.DS_Store
+promise-test.iml
+node_modules
