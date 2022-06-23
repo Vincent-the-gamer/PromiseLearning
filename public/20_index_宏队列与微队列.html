@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>宏队列与微队列</title>
+</head>
+<body>
+
+<script type="text/javascript">
+    /*
+      宏队列：[宏任务1，宏任务2...]
+      微队列：[微任务1, 微任务2...]
+      规则：每次要执行宏队列里的一个任务之前，先看微队列里是否有待执行的微任务
+    */
+
+    //执行顺序：主线程 -> 微队列所有微任务 -> 宏队列所有宏任务
+    //输出顺序：
+    //   主线程 -> 成功1 成功2 -> timeout
+
+    // 代码1
+    //宏任务  进入宏队列
+    // setTimeout(() => {
+    //     console.log('timeout')
+    // },0)
+    //
+    // //微任务 进入微队列
+    // Promise.resolve(1).then(
+    //     value => console.log('成功1',value)
+    // )
+    // //微任务 进入微队列
+    // Promise.resolve(2).then(
+    //     value => console.log('成功2',value)
+    // )
+    // //主线程
+    // console.log('主线程')
+
+
+    //代码二
+    //执行顺序：成功1 成功2 timeout1 timeout2
+    // setTimeout(() => {
+    //     console.log('timeout1')
+    // })
+    // setTimeout(() => {
+    //     console.log('timeout2')
+    // })
+    //
+    // Promise.resolve(1).then(
+    //     value => console.log('成功1',value)
+    // )
+    //
+    // Promise.resolve(1).then(
+    //     value => console.log('成功2',value)
+    // )
+
+    //
+
+
+
+</script>
+</body>
+</html>
